@@ -72,7 +72,13 @@ app.post("/api/v1/brain/content", userMiddleware, async (req, res) => {
   });
 });
 
-app.post("/api/v1/brain/content", userMiddleware, async (req, res) => {});
+app.post("/api/v1/brain/content", userMiddleware, async (req, res) => {
+  const userId = req.userId;
+  const content = await ContentMobel.find({
+    userId: userId,
+  }).populate("userId", "username");
+  res.json(content);
+});
 
 // app.post("/api/v1/brain/share", (req, res) => {});
 
