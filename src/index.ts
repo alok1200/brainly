@@ -2,8 +2,9 @@ import cors from "cors";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { JWT_PASSWORD } from "./config";
-import { ContentModel, UserModel } from "./db";
+import { ContentModel, LinkModel, UserModel } from "./db";
 import { userMiddleware } from "./middleware";
+import { random } from "./utils";
 
 const app = express();
 app.use(express.json());
@@ -92,7 +93,33 @@ app.delete("/api/v1/brain/content", userMiddleware, async (req, res) => {
   });
 });
 
-// app.post("/api/v1/brain/share", (req, res) => {});
+app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
+  const share = req.body.share;
+  if (share) {
+    const existingLink = await LinkModel.findOne({
+      userId: req.userId,
+    });
+    if (existingLink) {
+      res.json({
+        hash: existingLink.hash,
+      });
+      return;
+    }
+    const hash = random(6);
+    await LinkModel.create({
+      userId: req.userId,
+      hash,
+    });
+    res.json({ hash });
+  } else {
+    await LinkModel.deleteMany({
+      userId: req.userId,
+    });
+    res.json({
+      message: "rendom rink",
+    });
+  }
+});
 
 // app.get("/api/v1/breain/:shareLink", (req, res) => {});
 
