@@ -16,16 +16,24 @@ const express_1 = __importDefault(require("express"));
 // import jwt from "jsonwebtoken";
 const db_1 = require("./db");
 const app = (0, express_1.default)();
-app.get("/api/v1/content", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/v1/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // TODO: zod validation , hash the password
     const username = req.body.username;
     const password = req.body.password;
-    yield db_1.UserModel.create({
-        username: username,
-        password: password,
-    });
-    res.json({
-        messaage: "Usser created Successfully",
-    });
+    try {
+        yield db_1.UserModel.create({
+            username: username,
+            password: password,
+        });
+        res.json({
+            message: "User signed up",
+        });
+    }
+    catch (e) {
+        res.status(411).json({
+            message: "User already exists",
+        });
+    }
 }));
 // app.delete("/api/v1/content", (req, res) => {});
 // app.post("/api/v1/brain/share", (req, res) => {});

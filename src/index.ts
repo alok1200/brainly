@@ -3,18 +3,25 @@ import express from "express";
 import { UserModel } from "./db";
 const app = express();
 
-app.get("/api/v1/content", async (req, res) => {
+app.post("/api/v1/signup", async (req, res) => {
+  // TODO: zod validation , hash the password
   const username = req.body.username;
   const password = req.body.password;
 
-  await UserModel.create({
-    username: username,
-    password: password,
-  });
+  try {
+    await UserModel.create({
+      username: username,
+      password: password,
+    });
 
-  res.json({
-    messaage: "Usser created Successfully",
-  });
+    res.json({
+      message: "User signed up",
+    });
+  } catch (e) {
+    res.status(411).json({
+      message: "User already exists",
+    });
+  }
 });
 
 // app.delete("/api/v1/content", (req, res) => {});
