@@ -121,7 +121,38 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
   }
 });
 
-// app.get("/api/v1/breain/:shareLink", (req, res) => {});
+app.get("/api/v1/breain/:shareLink", async (req, res) => {
+  const hash = req.params.shareLink;
+
+  const link = await LinkModel.findOne({
+    hash,
+  });
+  if (!link) {
+    res.json({
+      message: "Sorry incorrect input",
+    });
+    return;
+  }
+
+  //userId
+  const content = await ContentModel.findOne({
+    userId: link.userId,
+  });
+  const user = await UserModel.findOne({
+    _id: link.userId,
+  });
+
+  if (!user) {
+    res.json({
+      message: "user is not found",
+    });
+    return;
+  }
+  res.json({
+    username: user.username,
+    content: content,
+  });
+});
 
 app.listen(3000);
 console.log("server started on port 3000");
