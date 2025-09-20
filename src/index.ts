@@ -31,11 +31,11 @@ app.post("/api/v1/signup", async (req, res) => {
   }
 });
 
-app.delete("/api/v1/sighin", (req, res) => {
+app.post("/api/v1/signin", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  const existingUser = UserModel.findOne({
+  const existingUser = await UserModel.findOne({
     username,
     password,
   });
@@ -56,7 +56,6 @@ app.delete("/api/v1/sighin", (req, res) => {
     });
   }
 });
-
 app.post("/api/v1/brain/content", userMiddleware, async (req, res) => {
   const link = req.body.link;
   const type = req.body.type;
