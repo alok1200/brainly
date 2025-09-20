@@ -14,7 +14,7 @@ const ContentSchema = new Schema({
   link: String,
   tags: [{ type: mongoose.Types.ObjectId, ref: "Tag" }],
   type: String,
-  userID: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+  userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
 });
 
 const LingSchema = new Schema({
@@ -22,7 +22,7 @@ const LingSchema = new Schema({
   userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
 });
 
-export const ContentMobel = model("Content", ContentSchema);
+export const ContentModel = model("Content", ContentSchema);
 export const LinkModel = model("Link", LingSchema);
 
 //https://youtube.com/shorts/Mq5NEAZwTx4?si=En-473W9_dmzOIml
